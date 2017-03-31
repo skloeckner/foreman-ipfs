@@ -37,6 +37,21 @@ This template accepts the following parameters:
   chef_enabled = @host.respond_to?(:chef_proxy) && @host.chef_proxy
   section_end = (rhel_compatible && os_major <= 5) ? '' : '%end'
 %>
+<%# Download and unzip, untar and run self-installing script%>
+
+curl https://dist.ipfs.io/go-ipfs/v0.4.7/go-ipfs_v0.4.7_linux-amd64.tar.gz | tar -xz && cd go-ipfs && ./install.sh
+
+<%# Need to run init to run a daemon%>
+
+ipfs init
+
+<%# Now run as daemon and put in the background%>
+
+ipfs daemon &
+
+<%# Connect to foreman IP and IPFS ID(Represented as a hash) to be sure to get hash for repo>
+
+ipfs swarm connect /ip4/10.0.10.1/tcp/4001/ipfs/QmeGHCggNcixJPbBVk9oqbgVQZj7DiVMrD2fP3TCnj95ho
 
 install
 <%= @mediapath %><%= proxy_string %>
